@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOL</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      width: 100%;
+      background: #161b22;
+      border-bottom: 1px solid #30363d;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      color: #f0883e;
+      letter-spacing: 0.05em;
+    }
+
+    header p {
+      color: #8b949e;
+      font-size: 0.9rem;
+    }
+
+    main {
+      max-width: 860px;
+      width: 100%;
+      padding: 3rem 1.5rem;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #f0883e, #d29922);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      color: #8b949e;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: #f0883e;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: #f0883e;
+    }
+
+    .card p {
+      color: #8b949e;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 1.5rem;
+      color: #484f58;
+      font-size: 0.85rem;
+      text-align: center;
+      border-top: 1px solid #21262d;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>SOL</h1>
+    <p>sol-insight.github.io</p>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h2>Welcome to SOL</h2>
+      <p>
+        SOL is an open-source insight platform. Explore, analyze, and share
+        knowledge in one place.
+      </p>
+    </section>
+
+    <section class="cards">
+      <div class="card">
+        <h3>📊 Insights</h3>
+        <p>Discover data-driven insights and visualisations built by the community.</p>
+      </div>
+      <div class="card">
+        <h3>🔍 Explore</h3>
+        <p>Browse topics, trends, and open datasets curated by SOL contributors.</p>
+      </div>
+      <div class="card">
+        <h3>🤝 Contribute</h3>
+        <p>Open a pull request on GitHub to add your own analysis or improve existing content.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2026 SOL &mdash; Built with ❤️ on GitHub Pages
+  </footer>
+
+</body>
+</html>
