@@ -1,0 +1,39 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="haloGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 512) rotate(90) scale(380)">
+      <stop offset="0" stop-color="#A5B4FC" stop-opacity="0.72"/>
+      <stop offset="0.58" stop-color="#6366F1" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#6366F1" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="coreGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 512) rotate(90) scale(84)">
+      <stop offset="0" stop-color="#E0E7FF"/>
+      <stop offset="1" stop-color="#818CF8"/>
+    </radialGradient>
+    <linearGradient id="orbitGradientA" x1="300" y1="220" x2="730" y2="804" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#C7D2FE"/>
+      <stop offset="1" stop-color="#818CF8"/>
+    </linearGradient>
+    <linearGradient id="orbitGradientB" x1="226" y1="322" x2="808" y2="694" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#A5B4FC"/>
+      <stop offset="1" stop-color="#6366F1"/>
+    </linearGradient>
+    <filter id="softGlow" x="80" y="80" width="864" height="864" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="34" result="blur"/>
+    </filter>
+  </defs>
+
+  <circle cx="512" cy="512" r="380" fill="url(#haloGradient)"/>
+  <g filter="url(#softGlow)">
+    <circle cx="512" cy="512" r="210" fill="#818CF8" fill-opacity="0.2"/>
+  </g>
+
+  <g transform="rotate(18 512 512)">
+    <ellipse cx="512" cy="512" rx="292" ry="184" stroke="url(#orbitGradientA)" stroke-width="28"/>
+  </g>
+  <g transform="rotate(-38 512 512)">
+    <ellipse cx="512" cy="512" rx="310" ry="138" stroke="url(#orbitGradientB)" stroke-width="24" stroke-opacity="0.9"/>
+  </g>
+
+  <circle cx="512" cy="512" r="78" fill="url(#coreGradient)"/>
+  <circle cx="512" cy="512" r="20" fill="#EEF2FF" fill-opacity="0.9"/>
+</svg>

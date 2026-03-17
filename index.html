@@ -3,150 +3,852 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SOL</title>
+  <title>SOL — AI Accountability for Engineering</title>
+  <link rel="icon" href="logos/sol-photon-logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --bg-deep: #05050a;
+      --bg-mid: #0a0a12;
+      --bg-card: #0f0f1a;
+      --accent: #6366f1;
+      --accent-light: #818cf8;
+      --accent-glow: #a5b4fc;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: rgba(99, 102, 241, 0.2);
+    }
+
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0d1117;
-      color: #e6edf3;
+      font-family: 'Outfit', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      overflow-x: hidden;
     }
 
+    /* Starfield background */
+    .stars {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background: 
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(129, 140, 248, 0.04) 0%, transparent 50%),
+        var(--bg-deep);
+    }
+    .stars::before,
+    .stars::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(1.5px 1.5px at 20px 30px, rgba(255,255,255,0.4), transparent),
+        radial-gradient(1.5px 1.5px at 40px 70px, rgba(255,255,255,0.3), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.5), transparent),
+        radial-gradient(1.5px 1.5px at 160px 120px, rgba(255,255,255,0.35), transparent),
+        radial-gradient(1px 1px at 230px 80px, rgba(255,255,255,0.4), transparent);
+      background-size: 250px 250px;
+      animation: twinkle 8s ease-in-out infinite;
+      opacity: 0.6;
+    }
+    .stars::after {
+      background-position: 125px 62px;
+      animation-delay: -4s;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .stars::before, .stars::after { animation: none; }
+      .photon-core { animation: none; transform: translate(0, 0); }
+      .orbit-logos, .insights-out { transform: none; }
+      .orbit-item { animation: none; transform: rotate(var(--angle)) translateX(var(--orbit-r)) rotate(calc(-1 * var(--angle))); }
+      .insight-particle, .insight-label { animation: none; opacity: 0; }
+      .photon-core .orbit-a, .photon-core .orbit-b { animation: none; }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Header */
     header {
-      width: 100%;
-      background: #161b22;
-      border-bottom: 1px solid #30363d;
-      padding: 1rem 2rem;
       display: flex;
       align-items: center;
-      gap: 1rem;
+      justify-content: space-between;
+      padding: 1.25rem 0;
     }
-
-    header h1 {
+    .logo-word {
+      font-weight: 700;
       font-size: 1.5rem;
-      color: #f0883e;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
+      color: var(--text);
+    }
+    .logo-word span { color: var(--accent-light); }
+    .app-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--accent-glow);
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .app-link:hover {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: var(--accent);
     }
 
-    header p {
-      color: #8b949e;
-      font-size: 0.9rem;
-    }
-
-    main {
-      max-width: 860px;
-      width: 100%;
-      padding: 3rem 1.5rem;
-    }
-
+    /* Hero */
     .hero {
       text-align: center;
-      margin-bottom: 3rem;
+      padding: 3rem 0 4rem;
     }
-
-    .hero h2 {
-      font-size: 2.5rem;
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 600;
+      line-height: 1.2;
       margin-bottom: 1rem;
-      background: linear-gradient(90deg, #f0883e, #d29922);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
     }
-
+    .hero h1 .highlight {
+      color: var(--accent-light);
+      font-weight: 500;
+    }
     .hero p {
-      color: #8b949e;
-      font-size: 1.1rem;
-      line-height: 1.7;
-      max-width: 600px;
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 560px;
       margin: 0 auto;
     }
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
+    /* Scroll reveal */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .scroll-reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .scroll-reveal.reveal-up { transform: translateY(36px); }
+    .scroll-reveal.reveal-up.visible { transform: translateY(0); }
+    .scroll-reveal.reveal-scale { transform: translateY(20px) scale(0.96); }
+    .scroll-reveal.reveal-scale.visible { transform: translateY(0) scale(1); }
+    .scroll-reveal.reveal-left { transform: translateX(-24px); }
+    .scroll-reveal.reveal-left.visible { transform: translateX(0); }
+    .scroll-reveal.reveal-right { transform: translateX(24px); }
+    .scroll-reveal.reveal-right.visible { transform: translateX(0); }
+    .scroll-reveal.stagger-1 { transition-delay: 0.05s; }
+    .scroll-reveal.stagger-2 { transition-delay: 0.12s; }
+    .scroll-reveal.stagger-3 { transition-delay: 0.19s; }
+    .scroll-reveal.stagger-4 { transition-delay: 0.26s; }
+    .scroll-reveal.stagger-5 { transition-delay: 0.33s; }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-reveal { opacity: 1; transform: none; transition: none; }
     }
 
-    .card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 10px;
-      padding: 1.5rem;
-      transition: border-color 0.2s;
-    }
-
-    .card:hover {
-      border-color: #f0883e;
-    }
-
-    .card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-      color: #f0883e;
-    }
-
-    .card p {
-      color: #8b949e;
-      font-size: 0.9rem;
-      line-height: 1.6;
-    }
-
-    footer {
-      margin-top: auto;
-      padding: 1.5rem;
-      color: #484f58;
-      font-size: 0.85rem;
-      text-align: center;
-      border-top: 1px solid #21262d;
+    /* Black hole / photon visual - full width */
+    .visual-section {
+      padding: 2rem 0 5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: min(55vw, 520px);
       width: 100%;
+      --stage: min(88vw, 820px);
+    }
+    .photon-stage {
+      position: relative;
+      width: var(--stage);
+      height: var(--stage);
+      max-width: 820px;
+      max-height: 520px;
+      --orbit-r: min(42vw, 380px);
+      --core-size: min(18vw, 180px);
+      --mouse-x: 0;
+      --mouse-y: 0;
+    }
+
+    /* Photon logo container - black hole core (mouse-reactive) */
+    .photon-core {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--core-size);
+      height: var(--core-size);
+      margin-left: calc(-1 * var(--core-size) / 2);
+      margin-top: calc(-1 * var(--core-size) / 2);
+      animation: photon-pulse 4s ease-in-out infinite;
+      transform: translate(
+        calc(var(--mouse-x) * 1px),
+        calc(var(--mouse-y) * 1px)
+      );
+    }
+    .photon-core svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 30px rgba(99, 102, 241, 0.5));
+    }
+    @keyframes photon-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.95; }
+    }
+
+    /* Orbiting integration logos - sucked in (scale with stage) */
+    .orbit-logos {
+      position: absolute;
+      inset: 0;
+      transform: translate(
+        calc(var(--mouse-x) * -0.4px),
+        calc(var(--mouse-y) * -0.4px)
+      );
+    }
+    .orbit-item {
+      position: absolute;
+      --logo-size: clamp(36px, 5vw, 52px);
+      width: var(--logo-size);
+      height: var(--logo-size);
+      left: 50%;
+      top: 50%;
+      margin-left: calc(-1 * var(--logo-size) / 2);
+      margin-top: calc(-1 * var(--logo-size) / 2);
+      animation: suck-in 8s ease-in infinite;
+      opacity: 0.9;
+    }
+    .orbit-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+    .orbit-item:nth-child(1) { animation-delay: 0s;   --angle: 0deg;   }
+    .orbit-item:nth-child(2) { animation-delay: -1.5s; --angle: 72deg;  }
+    .orbit-item:nth-child(3) { animation-delay: -3s;   --angle: 144deg; }
+    .orbit-item:nth-child(4) { animation-delay: -4.5s; --angle: 216deg; }
+    .orbit-item:nth-child(5) { animation-delay: -6s;   --angle: 288deg; }
+    @keyframes suck-in {
+      0% {
+        transform: rotate(var(--angle)) translateX(var(--orbit-r)) rotate(calc(-1 * var(--angle))) scale(1);
+        opacity: 0.9;
+      }
+      85% {
+        transform: rotate(var(--angle)) translateX(calc(var(--orbit-r) * 0.14)) rotate(calc(-1 * var(--angle))) scale(0.4);
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0;
+      }
+      100% {
+        transform: rotate(var(--angle)) translateX(0) rotate(calc(-1 * var(--angle))) scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* Insights flowing out (scale with stage) */
+    .insights-out {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      transform: translate(
+        calc(var(--mouse-x) * -0.25px),
+        calc(var(--mouse-y) * -0.25px)
+      );
+    }
+    .insight-particle {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 4px;
+      height: 4px;
+      margin-left: -2px;
+      margin-top: -2px;
+      background: var(--accent-light);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent);
+      animation: emit-out 3s ease-out infinite;
+    }
+    .insight-particle:nth-child(1) { animation-delay: 0s;   --a: 0deg;   }
+    .insight-particle:nth-child(2) { animation-delay: 0.4s; --a: 72deg;  }
+    .insight-particle:nth-child(3) { animation-delay: 0.8s; --a: 144deg; }
+    .insight-particle:nth-child(4) { animation-delay: 1.2s; --a: 216deg; }
+    .insight-particle:nth-child(5) { animation-delay: 1.6s; --a: 288deg; }
+    .insight-particle:nth-child(6) { animation-delay: 2s;   --a: 36deg;  }
+    .insight-particle:nth-child(7) { animation-delay: 2.4s; --a: 180deg; }
+    .insight-label {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(9px, 1.1vw, 12px);
+      font-weight: 500;
+      color: var(--accent-glow);
+      white-space: nowrap;
+      opacity: 0;
+      animation: emit-label 4s ease-out infinite;
+    }
+    .insight-label:nth-child(8)  { animation-delay: 0.5s;  --a: 15deg;  }
+    .insight-label:nth-child(9)  { animation-delay: 1.5s;  --a: 120deg; }
+    .insight-label:nth-child(10) { animation-delay: 2.5s;  --a: 240deg; }
+    .photon-stage { --emit-dist: min(45vw, 420px); }
+    @keyframes emit-label {
+      0% {
+        transform: rotate(var(--a)) translateY(0) scale(0.8);
+        opacity: 0;
+      }
+      15% { opacity: 0.9; }
+      100% {
+        transform: rotate(var(--a)) translateY(calc(-1 * var(--emit-dist, 200px))) scale(0.6);
+        opacity: 0;
+      }
+    }
+    @keyframes emit-out {
+      0% {
+        transform: rotate(var(--a)) translateY(0) scale(1);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      100% {
+        transform: rotate(var(--a)) translateY(calc(-1 * var(--emit-dist, 220px))) scale(0.3);
+        opacity: 0;
+      }
+    }
+
+    /* Feature cards */
+    .features {
+      padding: 2rem 0 4rem;
+    }
+    .features h2 {
+      font-size: 1.75rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 40px rgba(99, 102, 241, 0.08);
+    }
+    .feature-card h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--accent-glow);
+    }
+    .feature-card p {
+      font-size: 0.9375rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* Visual content sections */
+    .app-section {
+      padding: 4rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .app-section:first-of-type { border-top: none; }
+    .app-section .section-head {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .app-section .section-head .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.5rem;
+    }
+    .app-section .section-head h3 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .flow-visual {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .flow-node {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .flow-node.highlight {
+      border-color: var(--accent);
+      color: var(--accent-glow);
+      box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+    }
+    .flow-arrow {
+      color: var(--accent);
+      opacity: 0.6;
+      font-size: 1.25rem;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .kpi-bar-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+    }
+    .kpi-bar-wrap .name {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.5rem;
+    }
+    .kpi-bar {
+      height: 6px;
+      background: var(--bg-mid);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .kpi-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      border-radius: 3px;
+      width: 0;
+      transition: width 0.9s ease-out;
+    }
+    .kpi-bar-wrap.scroll-reveal.visible .kpi-bar .fill { width: var(--pct, 0%); }
+    .twin-visual {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .twin-box {
+      flex: 1;
+      min-width: 200px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .twin-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-light));
+      opacity: 0.6;
+    }
+    .twin-box .title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+    .twin-box .dots {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .twin-box .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      opacity: 0.4;
+    }
+    .twin-box .dot:nth-child(3n) { opacity: 0.7; }
+    .twin-box .dot:nth-child(5n) { opacity: 1; }
+    .rec-list {
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    .rec-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+    .rec-item:last-child { border-bottom: none; }
+    .rec-item .icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--accent-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      padding: 3rem 0 4rem;
+    }
+    .cta h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+    .cta p {
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+    .cta-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+    .cta-links a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--accent-light);
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .cta-links a.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+    .cta-links a:hover {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--accent);
+    }
+    .cta-links a.primary:hover {
+      background: var(--accent-light);
+      border-color: var(--accent-light);
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+    footer p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
     }
   </style>
 </head>
 <body>
+  <div class="stars"></div>
+  <div class="wrap">
+    <header>
+      <div class="logo-word">SOL<span>.</span></div>
+      <a href="https://app.sol-insight.tech/" class="app-link" target="_blank" rel="noopener">Open app →</a>
+    </header>
 
-  <header>
-    <h1>SOL</h1>
-    <p>sol-insight.github.io</p>
-  </header>
-
-  <main>
     <section class="hero">
-      <h2>Welcome to SOL</h2>
-      <p>
-        SOL is an open-source insight platform. Explore, analyze, and share
-        knowledge in one place.
-      </p>
+      <h1 class="scroll-reveal">AI adoption isn’t the problem. <span class="highlight">AI accountability</span> is.</h1>
+      <p class="scroll-reveal reveal-up" style="transition-delay: 0.08s">SOL unifies AI tool telemetry with PR, CI/CD, and workflow data so you can see where AI actually accelerates delivery—and where it doesn’t.</p>
+    </section>
+  </div>
+
+  <section class="visual-section scroll-reveal reveal-scale" id="visual-section" aria-hidden="true">
+      <div class="photon-stage" id="photon-stage">
+        <div class="orbit-logos">
+          <div class="orbit-item"><img src="logos/openai.svg" alt="" /></div>
+          <div class="orbit-item"><img src="logos/sourcegraph.svg" alt="" /></div>
+          <div class="orbit-item"><img src="logos/tabnine.svg" alt="" /></div>
+          <div class="orbit-item"><img src="logos/amazon-q.svg" alt="" /></div>
+          <div class="orbit-item"><img src="logos/greptile.svg" alt="" /></div>
+        </div>
+        <div class="photon-core">
+          <svg viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="haloGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 512) rotate(90) scale(380)">
+                <stop offset="0" stop-color="#A5B4FC" stop-opacity="0.72"/>
+                <stop offset="0.58" stop-color="#6366F1" stop-opacity="0.22"/>
+                <stop offset="1" stop-color="#6366F1" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="coreGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(512 512) rotate(90) scale(84)">
+                <stop offset="0" stop-color="#E0E7FF"/>
+                <stop offset="1" stop-color="#818CF8"/>
+              </radialGradient>
+              <linearGradient id="orbitGradientA" x1="300" y1="220" x2="730" y2="804" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#C7D2FE"/>
+                <stop offset="1" stop-color="#818CF8"/>
+              </linearGradient>
+              <linearGradient id="orbitGradientB" x1="226" y1="322" x2="808" y2="694" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#A5B4FC"/>
+                <stop offset="1" stop-color="#6366F1"/>
+              </linearGradient>
+              <filter id="softGlow" x="80" y="80" width="864" height="864" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                <feGaussianBlur stdDeviation="34" result="blur"/>
+              </filter>
+            </defs>
+            <circle cx="512" cy="512" r="380" fill="url(#haloGradient)"/>
+            <g filter="url(#softGlow)">
+              <circle cx="512" cy="512" r="210" fill="#818CF8" fill-opacity="0.2"/>
+            </g>
+            <g class="orbit-a" style="transform-origin: 512px 512px; animation: orbit-rotate 12s linear infinite;">
+              <ellipse cx="512" cy="512" rx="292" ry="184" stroke="url(#orbitGradientA)" stroke-width="28"/>
+            </g>
+            <g class="orbit-b" style="transform-origin: 512px 512px; animation: orbit-rotate 10s linear infinite reverse;">
+              <ellipse cx="512" cy="512" rx="310" ry="138" stroke="url(#orbitGradientB)" stroke-width="24" stroke-opacity="0.9"/>
+            </g>
+            <circle cx="512" cy="512" r="78" fill="url(#coreGradient)"/>
+            <circle cx="512" cy="512" r="20" fill="#EEF2FF" fill-opacity="0.9"/>
+          </svg>
+        </div>
+        <div class="insights-out">
+          <span class="insight-particle"></span>
+          <span class="insight-particle"></span>
+          <span class="insight-particle"></span>
+          <span class="insight-particle"></span>
+          <span class="insight-particle"></span>
+          <span class="insight-particle"></span>
+          <span class="insight-particle"></span>
+          <span class="insight-label">Cycle time ↓</span>
+          <span class="insight-label">Throughput ↑</span>
+          <span class="insight-label">ROI</span>
+        </div>
+      </div>
+  </section>
+
+  <div class="wrap">
+    <style>
+      @keyframes orbit-rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    </style>
+
+    <section class="app-section features">
+      <div class="section-head scroll-reveal">
+        <div class="label">Explainable impact</div>
+        <h3>One platform. Real KPIs.</h3>
+      </div>
+      <div class="feature-grid">
+        <div class="feature-card scroll-reveal stagger-1">
+          <h3>Forecasting</h3>
+          <p>Model where AI will have the highest impact next. Prioritize adoption and spend using data, not guesswork.</p>
+        </div>
+        <div class="feature-card scroll-reveal stagger-2">
+          <h3>Digital twin modeling</h3>
+          <p>Mirror your engineering flow in a metadata-first model. See bottlenecks and cycle time compression in real time.</p>
+        </div>
+        <div class="feature-card scroll-reveal stagger-3">
+          <h3>Targeted recommendations</h3>
+          <p>Get specific, actionable guidance to improve AI usage by repo, team, and workflow—backed by your own telemetry.</p>
+        </div>
+      </div>
     </section>
 
-    <section class="cards">
-      <div class="card">
-        <h3>📊 Insights</h3>
-        <p>Discover data-driven insights and visualisations built by the community.</p>
+    <section class="app-section">
+      <div class="section-head scroll-reveal">
+        <div class="label">What you measure</div>
+        <h3>Outcomes, not vanity metrics</h3>
       </div>
-      <div class="card">
-        <h3>🔍 Explore</h3>
-        <p>Browse topics, trends, and open datasets curated by SOL contributors.</p>
-      </div>
-      <div class="card">
-        <h3>🤝 Contribute</h3>
-        <p>Open a pull request on GitHub to add your own analysis or improve existing content.</p>
+      <div class="kpi-grid">
+        <div class="kpi-bar-wrap scroll-reveal stagger-1">
+          <div class="name">Cycle time</div>
+          <div class="kpi-bar"><div class="fill" style="--pct: 72%;"></div></div>
+        </div>
+        <div class="kpi-bar-wrap scroll-reveal stagger-2">
+          <div class="name">Review latency</div>
+          <div class="kpi-bar"><div class="fill" style="--pct: 58%;"></div></div>
+        </div>
+        <div class="kpi-bar-wrap scroll-reveal stagger-3">
+          <div class="name">Throughput</div>
+          <div class="kpi-bar"><div class="fill" style="--pct: 88%;"></div></div>
+        </div>
+        <div class="kpi-bar-wrap scroll-reveal stagger-4">
+          <div class="name">Spend vs impact</div>
+          <div class="kpi-bar"><div class="fill" style="--pct: 65%;"></div></div>
+        </div>
       </div>
     </section>
-  </main>
 
-  <footer>
-    &copy; 2026 SOL &mdash; Built with ❤️ on GitHub Pages
-  </footer>
+    <section class="app-section">
+      <div class="section-head scroll-reveal">
+        <div class="label">Forecasting & digital twin</div>
+        <h3>Model your flow. See what’s next.</h3>
+      </div>
+      <div class="twin-visual scroll-reveal reveal-scale">
+        <div class="twin-box">
+          <div class="title">Current state</div>
+          <div class="dots">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+        <span class="flow-arrow" style="font-size: 1.5rem;">→</span>
+        <div class="twin-box">
+          <div class="title">Forecast & bottlenecks</div>
+          <div class="dots">
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div>
+        </div>
+      </div>
+      <p class="scroll-reveal reveal-up" style="text-align: center; font-size: 0.9rem; color: var(--text-muted); max-width: 400px; margin: 1rem auto 0;">Metadata-first digital twin with forecasting and bottleneck detection.</p>
+    </section>
 
+    <section class="app-section">
+      <div class="section-head scroll-reveal">
+        <div class="label">Recommendations</div>
+        <h3>Targeted, actionable</h3>
+      </div>
+      <div class="rec-list scroll-reveal reveal-left">
+        <div class="rec-item"><span class="icon">1</span> By repo — where AI helps most</div>
+        <div class="rec-item"><span class="icon">2</span> By team — spend vs impact</div>
+        <div class="rec-item"><span class="icon">3</span> By workflow — cycle time & quality</div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2 class="scroll-reveal">Ready to measure what matters?</h2>
+      <p class="scroll-reveal reveal-up" style="transition-delay: 0.06s">See how SOL turns AI from an experiment into a measurable advantage.</p>
+      <div class="cta-links scroll-reveal reveal-up" style="transition-delay: 0.12s">
+        <a href="https://calendly.com/lnm7-rice/30-with-leo" class="primary" target="_blank" rel="noopener">Book a demo</a>
+        <a href="mailto:lnm7@rice.edu">Get in contact</a>
+      </div>
+    </section>
+
+    <footer class="scroll-reveal">
+      <p>SOL — Speed of Light. AI accountability for engineering.</p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var stage = document.getElementById('photon-stage');
+      var section = document.getElementById('visual-section');
+      if (!stage || !section) return;
+
+      var maxOffset = 28;
+      var ease = 0.12;
+      var x = 0, y = 0;
+      var targetX = 0, targetY = 0;
+      var raf = null;
+
+      function setMouse(px, py) {
+        targetX = px;
+        targetY = py;
+        if (raf === null) {
+          raf = requestAnimationFrame(update);
+        }
+      }
+
+      function update() {
+        raf = null;
+        x += (targetX - x) * ease;
+        y += (targetY - y) * ease;
+        stage.style.setProperty('--mouse-x', String(Math.round(x)));
+        stage.style.setProperty('--mouse-y', String(Math.round(y)));
+        if (Math.abs(targetX - x) > 0.5 || Math.abs(targetY - y) > 0.5) {
+          raf = requestAnimationFrame(update);
+        }
+      }
+
+      function onMove(e) {
+        var rect = section.getBoundingClientRect();
+        var cx = rect.left + rect.width / 2;
+        var cy = rect.top + rect.height / 2;
+        var dx = (e.clientX - cx) / (rect.width / 2);
+        var dy = (e.clientY - cy) / (rect.height / 2);
+        dx = Math.max(-1, Math.min(1, dx));
+        dy = Math.max(-1, Math.min(1, dy));
+        setMouse(dx * maxOffset, dy * maxOffset);
+      }
+
+      function onLeave() {
+        setMouse(0, 0);
+      }
+
+      section.addEventListener('mousemove', onMove, { passive: true });
+      section.addEventListener('mouseleave', onLeave);
+    })();
+
+    (function () {
+      var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduced) return;
+      var els = document.querySelectorAll('.scroll-reveal');
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
 </body>
 </html>
